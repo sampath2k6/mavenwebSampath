@@ -18,11 +18,20 @@ pipeline {
 
     post {
         success {
-            echo 'Maven build completed successfully!'
+            echo 'Build successful. Sending email...'
+            emailext(
+                to: 'sampath2k6@gmail.com',
+                subject: "SUCCESS: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build completed successfully.\nJob: ${env.JOB_NAME}\nBuild: ${env.BUILD_NUMBER}\nConsole: ${env.BUILD_URL}console"
+            )
         }
         failure {
-            echo 'Pipeline failed. Check the console output.'
+            echo 'Build failed. Sending email...'
+            emailext(
+                to: 'sampath2k6@gmail.com',
+                subject: "FAILURE: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
+                body: "Build failed. Please check the console output:\n${env.BUILD_URL}console"
+            )
         }
     }
 }
-
